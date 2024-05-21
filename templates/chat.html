@@ -11,17 +11,25 @@
         <nav>
             <div class="logo">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="40">
-                <span>GPCbot</span>
+                <ul>
+                    <li><a href="/">Chat</a></li>
+                    <li><a href="/chat">CodeCompletion</a></li>
+                </ul>
             </div>
-            <ul>
-                <li><a href="/">GPCbot</a></li>
-                <li><a href="/chat">Chat</a></li>
-                <li><a href="#">Notebook</a></li>
-            </ul>
         </nav>
     </header>
     <main>
         <div class="chat-container">
+            <aside class="sidebar">
+                <h2>Chats</h2>
+                <ul>
+                    <li>Copilot</li>
+                    <li>Designer</li>
+                    <li>Vacation planner</li>
+                    <li>Cooking assistant</li>
+                    <li>Fitness trainer</li>
+                </ul>
+            </aside>
             <section class="chat-section">
                 <div class="messages" id="messages">
                     <!-- Messages will be appended here -->
