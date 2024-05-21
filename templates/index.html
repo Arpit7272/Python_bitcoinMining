@@ -11,13 +11,11 @@
         <nav>
             <div class="logo">
                 <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="40">
-                <span>GPCbot</span>
+                <ul>
+                    <li><a href="/">Chat</a></li>
+                    <li><a href="/chat">CodeCompletion</a></li>
+                </ul>
             </div>
-            <ul>
-                <li><a href="/">GPCbot</a></li>
-                <li><a href="/chat">Chat</a></li>
-                <li><a href="#">Notebook</a></li>
-            </ul>
         </nav>
     </header>
     <main>
@@ -47,7 +45,7 @@
                 <span>&#128512;</span>
                 <span>&#128247;</span>
                 <span>&#128265;</span>
-                <span>&#9658;</span>
+                <button id="send-button">&#9658;</button>
             </div>
         </div>
     </footer>
