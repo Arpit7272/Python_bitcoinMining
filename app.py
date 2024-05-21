@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, Response
 import time
+import ollama
 
 app = Flask(__name__)
 
@@ -15,9 +16,15 @@ def chat():
 
 def generate_response(user_message):
     stream = ollama.chat(model='your_model_name', messages=[{'role': 'user', 'content': user_message}], stream=True)
+    buffer = ""
     for chunk in stream:
-        yield f"data: {chunk['message']['content']}\n\n"
-        time.sleep(0.1)  # Adjust this delay as needed
+        buffer += chunk["message"]["content"]
+        while "\n" in buffer:
+            line, buffer = buffer.split("\n", 1)
+            yield f"data: {line}\n\n"
+            time.sleep(0.1)  # Adjust this delay as needed
+    if buffer:
+        yield f"data: {buffer}\n\n"
 
 @app.route('/api/message', methods=['POST'])
 def message():
