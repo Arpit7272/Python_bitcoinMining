@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>GPCbot Chat</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" height="40">
+                <span>GPCbot</span>
+            </div>
+            <ul>
+                <li><a href="/">GPCbot</a></li>
+                <li><a href="/chat">Chat</a></li>
+                <li><a href="#">Notebook</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="chat-container">
+            <section class="chat-section">
+                <div class="messages" id="messages">
+                    <!-- Messages will be appended here -->
+                </div>
+                <div class="input-container">
+                    <textarea id="user-input" placeholder="Ask me anything..." rows="1"></textarea>
+                    <div class="icons">
+                        <span>&#128512;</span>
+                        <span>&#128247;</span>
+                        <span>&#128265;</span>
+                        <button id="send-button">&#9658;</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

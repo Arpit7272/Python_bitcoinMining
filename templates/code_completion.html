@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Code Completion - GPCbot</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/placeholder.png') }}" alt="Logo" height="40">
+                <span>GPCbot</span>
+            </div>
+            <ul>
+                <li><a href="/">GPCbot</a></li>
+                <li><a href="/code-completion">Code Completion</a></li>
+                <li><a href="#">Notebook</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="intro">
+            <h1>Code Completion</h1>
+            <p>How I can help you with your code?</p>
+        </div>
+        <div class="cards">
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/placeholder.png') }}" alt="Card Image">
+                <p>Complete my Python code for data analysis</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/placeholder.png') }}" alt="Card Image">
+                <p>Help me debug my JavaScript code</p>
+            </div>
+            <div class="card">
+                <img src="{{ url_for('static', filename='images/placeholder.png') }}" alt="Card Image">
+                <p>Optimize my SQL queries</p>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="input-container">
+            <input type="text" placeholder="Ask me anything...">
+            <div class="icons">
+                <span>&#128512;</span>
+                <span>&#128247;</span>
+                <span>&#128265;</span>
+                <span>&#9658;</span>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
