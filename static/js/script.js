@@ -11,11 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
             userInput.style.height = 'auto';
 
             let botMessageElement = addMessage('GPCbot', '', 'bot-message');
-            let loadingGif = document.createElement('img');
-            loadingGif.src = "{{ url_for('static', filename='images/loading.gif') }}";
-            loadingGif.alt = "Loading...";
-            loadingGif.classList.add('loading-gif');
-            botMessageElement.querySelector('p').appendChild(loadingGif);
 
             fetch('/api/message', {
                 method: 'POST',
@@ -31,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const eventSource = new EventSource('/api/message');
 
                 eventSource.onmessage = function(event) {
-                    loadingGif.remove();  // Remove the loading gif
                     botMessageElement.querySelector('p').innerText += event.data;
                     messages.scrollTop = messages.scrollHeight;
                 };
