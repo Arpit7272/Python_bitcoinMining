@@ -10,33 +10,39 @@ document.addEventListener('DOMContentLoaded', () => {
             userInput.value = '';
             userInput.style.height = 'auto';
 
+            let botMessageElement = addMessage('GPCbot', '', 'bot-message');
+            let loadingGif = document.createElement('img');
+            loadingGif.src = "{{ url_for('static', filename='images/loading.gif') }}";
+            loadingGif.alt = "Loading...";
+            loadingGif.classList.add('loading-gif');
+            botMessageElement.querySelector('p').appendChild(loadingGif);
+
+            const eventSource = new EventSource('/api/message');
+
+            eventSource.onmessage = function(event) {
+                loadingGif.remove();  // Remove the loading gif
+                botMessageElement.querySelector('p').innerText += event.data;
+                messages.scrollTop = messages.scrollHeight;
+            };
+
+            eventSource.onerror = function(event) {
+                console.error('EventSource failed:', event);
+                eventSource.close();
+            };
+
             fetch('/api/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ message: messageText }),
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const reader = response.body.getReader();
-                    const decoder = new TextDecoder();
-                    let botMessageElement = addMessage('GPCbot', '', 'bot-message');
-                    return reader.read().then(function processText({ done, value }) {
-                        if (done) {
-                            return;
-                        }
-                        const text = decoder.decode(value);
-                        botMessageElement.querySelector('p').innerText += text;
-                        messages.scrollTop = messages.scrollHeight;
-                        return reader.read().then(processText);
-                    });
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
-                });
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            }).catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
         }
     });
 
