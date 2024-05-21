@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             eventSource.onmessage = function(event) {
                 loadingGif.remove();  // Remove the loading gif
-                botMessageElement.querySelector('p').innerText += event.data;
+                botMessageElement.querySelector('p').innerText += event.data + '\n';
                 messages.scrollTop = messages.scrollHeight;
             };
 
