@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const eventSource = new EventSource('/api/stream');
 
                 eventSource.onmessage = function(event) {
-                    botMessageElement.querySelector('p').innerText += event.data;
+                    const newText = document.createTextNode(event.data + '\n');
+                    botMessageElement.querySelector('p').appendChild(newText);
                     messages.scrollTop = messages.scrollHeight;
                 };
 
