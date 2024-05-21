@@ -17,19 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loadingGif.classList.add('loading-gif');
             botMessageElement.querySelector('p').appendChild(loadingGif);
 
-            const eventSource = new EventSource('/api/message');
-
-            eventSource.onmessage = function(event) {
-                loadingGif.remove();  // Remove the loading gif
-                botMessageElement.querySelector('p').innerText += event.data + '\n';
-                messages.scrollTop = messages.scrollHeight;
-            };
-
-            eventSource.onerror = function(event) {
-                console.error('EventSource failed:', event);
-                eventSource.close();
-            };
-
             fetch('/api/message', {
                 method: 'POST',
                 headers: {
@@ -40,6 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
+
+                const eventSource = new EventSource('/api/message');
+
+                eventSource.onmessage = function(event) {
+                    loadingGif.remove();  // Remove the loading gif
+                    botMessageElement.querySelector('p').innerText += event.data;
+                    messages.scrollTop = messages.scrollHeight;
+                };
+
+                eventSource.onerror = function(event) {
+                    console.error('EventSource failed:', event);
+                    eventSource.close();
+                };
             }).catch(error => {
                 console.error('There has been a problem with your fetch operation:', error);
             });
