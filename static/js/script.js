@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error('Network response was not ok');
                 }
 
-                const eventSource = new EventSource('/api/message');
+                const eventSource = new EventSource('/api/stream');
 
                 eventSource.onmessage = function(event) {
                     botMessageElement.querySelector('p').innerText += event.data;
