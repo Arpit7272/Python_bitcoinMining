@@ -14,7 +14,10 @@ def chat():
     bot_name = "GPCbot"
     return render_template('chat.html', bot_name=bot_name)
 
-def generate_response(user_message):
+user_message = ""
+
+def generate_response():
+    global user_message
     stream = ollama.chat(model='your_model_name', messages=[{'role': 'user', 'content': user_message}], stream=True)
     buffer = ""
     for chunk in stream:
@@ -28,8 +31,13 @@ def generate_response(user_message):
 
 @app.route('/api/message', methods=['POST'])
 def message():
+    global user_message
     user_message = request.json.get('message')
-    return Response(generate_response(user_message), mimetype='text/event-stream')
+    return '', 204  # No content response
+
+@app.route('/api/stream')
+def stream():
+    return Response(generate_response(), mimetype='text/event-stream')
 
 if __name__ == '__main__':
     app.run(debug=True)
