@@ -1,63 +1,60 @@
-document.addEventListener('DOMContentLoaded', () => {
+function sendMessage() {
     const userInput = document.getElementById('user-input');
-    const sendButton = document.getElementById('send-button');
-    const messages = document.getElementById('messages');
-
-    sendButton.addEventListener('click', () => {
-        const messageText = userInput.value.trim();
-        if (messageText) {
-            addMessage('You', messageText, 'user-message');
-            userInput.value = '';
-            userInput.style.height = 'auto';
-
-            let botMessageElement = addMessage('GPCbot', '', 'bot-message');
-
-            fetch('/api/message', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: messageText }),
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const eventSource = new EventSource('/api/stream');
-
-                eventSource.onmessage = function(event) {
-                    const newContent = event.data.replace(/\n/g, '<br>');
-                    botMessageElement.querySelector('p').innerHTML += newContent + '<br>';
-                    messages.scrollTop = messages.scrollHeight;
-                };
-
-                eventSource.onerror = function(event) {
-                    console.error('EventSource failed:', event);
-                    eventSource.close();
-                };
-            }).catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-        }
-    });
-
-    userInput.addEventListener('input', () => {
+    const messageText = userInput.value.trim();
+    if (messageText) {
+        addMessage('You', messageText, 'user-message');
+        userInput.value = '';
         userInput.style.height = 'auto';
-        userInput.style.height = `${userInput.scrollHeight}px`;
 
-        if (userInput.scrollHeight > 200) {
-            userInput.style.overflowY = 'scroll';
-        } else {
-            userInput.style.overflowY = 'hidden';
-        }
-    });
+        let botMessageElement = addMessage('GPCbot', '', 'bot-message');
+        let contentElement = document.createElement('div');
+        contentElement.style.whiteSpace = 'pre-wrap';
+        botMessageElement.appendChild(contentElement);
 
-    function addMessage(sender, text, className) {
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('message', className);
-        messageElement.innerHTML = `<span>${sender}</span><p>${text}</p>`;
-        messages.appendChild(messageElement);
-        messages.scrollTop = messages.scrollHeight;
-        return messageElement;
+        fetch('/api/message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: messageText }),
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const eventSource = new EventSource('/api/stream');
+
+            eventSource.onmessage = function(event) {
+                contentElement.innerHTML += event.data + '\n';
+                messages.scrollTop = messages.scrollHeight;
+            };
+
+            eventSource.onerror = function(event) {
+                console.error('EventSource failed:', event);
+                eventSource.close();
+            };
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
+    }
+}
+
+function addMessage(sender, text, className) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message', className);
+    messageElement.innerHTML = `<span>${sender}</span><div style="white-space: pre-wrap;">${text}</div>`;
+    messages.appendChild(messageElement);
+    messages.scrollTop = messages.scrollHeight;
+    return messageElement;
+}
+
+document.getElementById('user-input').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = `${this.scrollHeight}px`;
+
+    if (this.scrollHeight > 200) {
+        this.style.overflowY = 'scroll';
+    } else {
+        this.style.overflowY = 'hidden';
     }
 });
